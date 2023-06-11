@@ -102,7 +102,7 @@ exports.signUp = async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(401).json({
+      return res.status(521).json({
         success: false,
         message: "user email Already Exist",
       });
@@ -118,7 +118,7 @@ exports.signUp = async (req, res) => {
     // validate otp
     if (recentOtp.length === 0) {
       // otp not found
-      return res.status(401).json({
+      return res.status(511).json({
         success: false,
         message: "otp not found",
       });
@@ -126,7 +126,7 @@ exports.signUp = async (req, res) => {
     // check krenge ki generated otp is not equal to db stored otp
     // abhi hm otp ka object banayenge , user ka object otp verify ke baad banega
     else if (otp !== recentOtp[0].otp) {
-      return res.status(401).json({
+      return res.status(501).json({
         success: false,
         message: "Invalid otp",
       });
@@ -153,7 +153,7 @@ exports.signUp = async (req, res) => {
       image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`,
     });
 
-    return res.status(401).json({
+    return res.status(200).json({
         success : true ,
            
         message : "User Sign up succesfully",
@@ -161,7 +161,7 @@ exports.signUp = async (req, res) => {
     })
 
   } catch (err){
-    return res.status(401).json({
+    return res.status(500).json({
         success : false ,
         message : "sign up not success",
         error : err.message

@@ -56,6 +56,8 @@ export function signUp(
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
+      console.log("signup")
+      try{
       const response = await apiConnector("POST", SIGNUP_API, {
         accountType,
         firstName,
@@ -65,12 +67,15 @@ export function signUp(
         confirmPassword,
         otp,
       })
+    }catch(err){
+      console.log("try=" , err.message)
+    }
 
-      console.log("SIGNUP API RESPONSE............", response)
+      // console.log("SIGNUP API RESPONSE............", response)
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
-      }
+      // if (!response.data.success) {
+      //   throw new Error(response.data.message)
+      // }
       toast.success("Signup Successful")
       navigate("/login")
     } catch (error) {
@@ -144,9 +149,9 @@ export function getPasswordResetToken(email , setEmailSent) {
         console.log(response)
       
 
-      // if(!response.data.success) {
-      //   throw new Error(response.data.message);
-      // }
+      if(!response.data.success) {
+        throw new Error(response.data.message);
+      }
 
       toast.success("Reset Email Sent");
       setEmailSent(true);
@@ -163,8 +168,9 @@ export function resetPassword(password, confirmPassword, token) {
   return async(dispatch) => {
     dispatch(setLoading(true));
     try{
-      
+      console.log("1")
       const response = await apiConnector("POST", RESETPASSWORD_API, {password, confirmPassword, token});
+      console.log("2")
 
       console.log("RESET Password RESPONSE ... ", response);
 
