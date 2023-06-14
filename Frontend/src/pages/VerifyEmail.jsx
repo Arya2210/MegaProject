@@ -67,7 +67,7 @@ function VerifyEmail() {
                         </div>
                         <div>
                               <button
-                               onClick={()=>dispatch(sendOtp(signupData.email))}
+                               onClick={()=>dispatch(sendOtp(signupData.email ,navigate))}
                              > Resend it</button>
                         </div>
                     </div>
