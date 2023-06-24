@@ -1,7 +1,7 @@
 import React from 'react'
 import ContactUsForm from '../../ContactPage/ContactUsForm'
 
-function ContactFormSection() {
+function Section() {
   return (
     <div className='mx-auto flex flex-col'>
 
@@ -20,4 +20,4 @@ function ContactFormSection() {
   )
 }
 
-export default ContactFormSection
+export default Section
