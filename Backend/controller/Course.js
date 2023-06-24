@@ -10,10 +10,12 @@ exports.createCourse = async(req , res)=>{
      let { courseName , courseDescription , whatYouWillLearn , price , tag , category , status , instructions} = req.body 
 
     //  get thubnails
-    const thumbnail = req.files.thumbnailImage
+    // const thumbnail = req.files.thumbnailImage
     // validation
 
-    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag){
+    if(!courseName || !courseDescription || !whatYouWillLearn || !price
+        //  || !tag
+         ){
         return res.status(400).json({
             success : false ,
             messgae : "all field are required"
@@ -51,8 +53,8 @@ exports.createCourse = async(req , res)=>{
     }
 
     // upload courese image to cloudsdinary
-    const thumbnailImage = await uploaderImageToCloudinary(thumbnail , process.env.FOLDER_NAME) 
-    console.log( "thumbnailimage = ",thumbnailImage)
+    // const thumbnailImage = await uploaderImageToCloudinary(thumbnail , process.env.FOLDER_NAME) 
+    // console.log( "thumbnailimage = ",thumbnailImage)
 
     // create entry for new course
 
@@ -64,7 +66,7 @@ exports.createCourse = async(req , res)=>{
         price ,
         category : categoryDetails._id ,
         tag  ,
-        thumbnail : thumbnailImage.secure_url ,
+        
         
 
     })
@@ -172,7 +174,7 @@ if(!courseDetails){
 }
 // return response
 
-return res.status(400).json({
+return res.status(200).json({
     success : true ,
     message :"course details fetched succesfully" ,
     course : courseDetails ,

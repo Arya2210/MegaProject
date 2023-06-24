@@ -2,8 +2,11 @@ import React from 'react'
 
 function Error() {
   return (
-    <div className='flex justify-center items-center text-3xl text-richblack-300 '>
+    <div className='flex justify-center  items-center mt-52'>
+      
+    <div className='flex justify-center text-center items-center text-3xl text-white '>
        Error - 404 Not Found
+    </div>
     </div>
   )
 }

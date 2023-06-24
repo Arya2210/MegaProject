@@ -78,7 +78,7 @@ function About() {
 
         {/* Section 5 */}
 
-        <section className='mx-auto  flex items-center justify-center' >
+        <section className='mx-auto  flex flex-col items-center justify-between mb-[140px] gap-5' >
             <LearningGrid/>
             <ContactFormSection/>
         </section>

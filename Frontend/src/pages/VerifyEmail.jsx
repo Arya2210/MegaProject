@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState , useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import OTPInput from "react-otp-input"
 import {signUp ,sendOtp} from "../services/operations/authAPI"
-import {Link, useNavigate} from "react-router-dom"
+import {Link, useNavigate } from "react-router-dom"
 
 function VerifyEmail() {
     const {loading ,signupData } = useSelector( (state)=>state.auth)

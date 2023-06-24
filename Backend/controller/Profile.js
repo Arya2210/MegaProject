@@ -133,6 +133,7 @@ exports.getAllUserDetails = async (req , res)=>{
 }
 //  ek user konse courses me enrolled h
 exports.getEnrolledCourses = async(req, res)=>{
+    console.log("req aaye kya")
     try{
 
         const userId = req.user.id ;
