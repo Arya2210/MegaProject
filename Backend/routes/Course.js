@@ -2,10 +2,10 @@ const express = require("express")
 const router = express.Router() ;
 
 
-const {getCourseDetails ,getAllCourses ,createCourse } = require("../controller/Course") 
+const {getCourseDetails ,getAllCourses ,createCourse , editCourse , getInstructorCourses ,deleteCourse} = require("../controller/Course") 
 const {categoryPageDetails  ,showAllCategory  ,createCategory} = require("../controller/Category")
 const {deleteSection ,updateSection ,createSection} = require("../controller/Section")
-const {deleteSubSection ,updateSubSection ,createSubsection} = require("../controller/Subsection")
+const {deleteSubSection ,updateSubSection ,createSubSection} = require("../controller/Subsection")
 const {getAllRating ,getAverageRating ,createRating} = require("../controller/RatingAndReviews")
 
 // import middleWare
@@ -29,7 +29,7 @@ router.post( "/deleteSection" , auth , isInstructor ,deleteSection) ;
 
 // add subsection
 
-router.post("/addSubSection" , auth , isInstructor ,createSubsection) ;
+router.post("/addSubSection" , auth , isInstructor ,createSubSection) ;
 
 // update subsection
 
@@ -46,6 +46,14 @@ router.get("/getAllCourses" , getAllCourses)
 // get detail for specific course
 
 router.post("/getCourseDetails" , getCourseDetails)
+
+// Edit Course routes
+router.post("/editCourse", auth, isInstructor, editCourse)
+
+// Get all Courses Under a Specific Instructor
+router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses)
+// Delete a Course
+router.delete("/deleteCourse", deleteCourse)
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%% CATEGORY ROUTES
 

@@ -79,7 +79,7 @@ function ContactUsForm() {
         </div>
         {/* email */}
         <div className="flex flex-col">
-          <label htmlFor="email">Email Address</label>
+          <label htmlFor="email">Email Address de</label>
           <input
             type="email"
             name="email"
