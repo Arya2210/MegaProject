@@ -8,7 +8,7 @@ require("dotenv").config() ;
 // otp generator
 
 exports.sendOTP = async (req, res) => {
-  console.log("heoo")
+  
   try {
     const { email } = req.body;
 

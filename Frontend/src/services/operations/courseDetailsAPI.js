@@ -310,6 +310,7 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
   //   dispatch(setLoading(true));
   let result = null
   try {
+    console.log("Inside try")
     const response = await apiConnector(
       "POST",
       GET_FULL_COURSE_DETAILS_AUTHENTICATED,
@@ -317,7 +318,7 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
         courseId,
       },
       {
-        z: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       }
     )
     console.log("COURSE_FULL_DETAILS_API API RESPONSE............", response)
@@ -325,14 +326,16 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
     if (!response.data.success) {
       throw new Error(response.data.message)
     }
-    result = response?.data?.data
+    result = response?.data?.course
+    
   } catch (error) {
     console.log("COURSE_FULL_DETAILS_API API ERROR............", error)
     result = error.response.data
-    // toast.error(error.response.data.message);
+    toast.error(error.response.data.message);
   }
   toast.dismiss(toastId)
   //   dispatch(setLoading(false));
+  console.log("result gya kya" , result)
   return result
 }
 

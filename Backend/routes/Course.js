@@ -3,7 +3,7 @@ const router = express.Router() ;
 
 
 const {getCourseDetails ,getAllCourses ,createCourse , editCourse , getInstructorCourses ,deleteCourse} = require("../controller/Course") 
-const {categoryPageDetails  ,showAllCategory  ,createCategory} = require("../controller/Category")
+const {categoryPageDetails  ,showAllCategories  ,createCategory} = require("../controller/Category")
 const {deleteSection ,updateSection ,createSection} = require("../controller/Section")
 const {deleteSubSection ,updateSubSection ,createSubSection} = require("../controller/Subsection")
 const {getAllRating ,getAverageRating ,createRating} = require("../controller/RatingAndReviews")
@@ -45,6 +45,7 @@ router.get("/getAllCourses" , getAllCourses)
 
 // get detail for specific course
 
+// galti
 router.post("/getCourseDetails" , getCourseDetails)
 
 // Edit Course routes
@@ -59,7 +60,7 @@ router.delete("/deleteCourse", deleteCourse)
 
 router.post("/createCategory" ,  auth , isAdmin , createCategory) ;
 
-router.get("/showAllCategories" , showAllCategory) ;
+router.get("/showAllCategories" , showAllCategories) ;
 
 router.post("/getcategoryPageDetails" , categoryPageDetails) ;
 

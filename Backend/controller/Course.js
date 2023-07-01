@@ -6,17 +6,18 @@ const SubSection = require("../models/SubSection")
 // user ke admin role ke liye course wale section ko update krna hoga
 
 const {uploaderImageToCloudinary} = require("../utils/imageUploader") ;
+const {convertSecondsToDuration} = require("../utils/secToDuration")
 
 exports.createCourse = async(req , res)=>{
     try{
-     let { courseName , courseDescription , whatYouWillLearn , price , tag , category , status , instructions} = req.body 
+     let { courseName , courseDescription , whatYouWillLearn , price , tag:_tag , category , status , instructions : _instructions} = req.body 
 
     //  get thubnails
-    // const thumbnail = req.files.thumbnailImage
+    const thumbnail = req.files.thumbnailImage
     // validation
 
-    if(!courseName || !courseDescription || !whatYouWillLearn || !price
-        //  || !tag
+    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !thumbnail
+        //  || !_tag
          ){
         return res.status(400).json({
             success : false ,
@@ -33,7 +34,7 @@ exports.createCourse = async(req , res)=>{
     const userId = req.user.id  ;
 
     const instructorDetails = await User.findById(userId , {accountType : "Instructor"}) ;
-    console.log("instructor detqail" , instructorDetails) ;
+    console.log("instructor details =>" , instructorDetails) ;
 
     if(!instructorDetails){
         return res.status(400).json({
@@ -44,7 +45,7 @@ exports.createCourse = async(req , res)=>{
 
     // check givrn tag is valid or not
 
-    const categoryDetails = await Category.findById(category)
+    const categoryDetails = await Category.findById({_id : category})
 
     if(!categoryDetails){
         return res.status(400).json({
@@ -55,8 +56,8 @@ exports.createCourse = async(req , res)=>{
     }
 
     // upload courese image to cloudsdinary
-    // const thumbnailImage = await uploaderImageToCloudinary(thumbnail , process.env.FOLDER_NAME) 
-    // console.log( "thumbnailimage = ",thumbnailImage)
+    const thumbnailImage = await uploaderImageToCloudinary(thumbnail , process.env.FOLDER_NAME) 
+    console.log( "thumbnailimage URL = ",thumbnailImage.secure_url)
 
     // create entry for new course
 
@@ -67,7 +68,8 @@ exports.createCourse = async(req , res)=>{
         whatYouWillLearn ,
         price ,
         category : categoryDetails._id ,
-        tag  ,
+        tag:_tag ,
+        thumbnail : thumbnailImage.secure_url
         
         
 
@@ -89,7 +91,7 @@ exports.createCourse = async(req , res)=>{
     const cate =     await Category.findByIdAndUpdate(
                              {_id : category },
                              {$push :{
-                                 course : newCourse._id
+                                 courses : newCourse._id
                              }} ,
                              {new : true}
         )       
@@ -131,7 +133,7 @@ exports.editCourse = async (req, res) => {
       if (req.files) {
         console.log("thumbnail update")
         const thumbnail = req.files.thumbnailImage
-        const thumbnailImage = await uploadImageToCloudinary(
+        const thumbnailImage = await uploaderImageToCloudinary(
           thumbnail,
           process.env.FOLDER_NAME
         )
@@ -218,24 +220,27 @@ exports.getCourseDetails = async(req , res)=>{
         const {courseId} = req.body ;
         // find course details
 
-        const courseDetails = await Course.findById({_id : courseId})
-                                                                              .populate(
+        const courseDetails = await Course.findById({_id : courseId}).populate(
                                                                                {
                                                                                    path : "instructor" ,
                                                                                    populate :{
                                                                                        path : "additionalDetails" ,
                                                                                    },
                                                                                }
-                                                                    ).populate("category")
-                                                                    //  .populate("ratingAndreviews")
-                                                                    .populate({
-                                                                       path : "courseContent" ,
-                                                                        populate:{
-                                                                            path:"subSection"
-                                                                        },
-                                                                    }).exec() ;
+                                                                               ).populate("category")
+                                                                               .populate("ratingAndReviews")
+                                                                               .populate({
+                                                                                  path : "courseContent" ,
+                                                                                   populate:{
+                                                                                       path:"subSection",
+                                                                                       select :"-videoUrl"
+                                                                                   },
+                                                                                })
+                                                                                .exec() ;
                                                                              
 // validation
+
+
 
 if(!courseDetails){
     return res.status(400).json({
@@ -245,10 +250,22 @@ if(!courseDetails){
 }
 // return response
 
+let totalDurationInSeconds = 0
+courseDetails.courseContent.forEach((content) => {
+  content.subSection.forEach((subSection) => {
+    const timeDurationInSeconds = parseInt(subSection.timeDuration)
+    totalDurationInSeconds += timeDurationInSeconds
+  })
+})
+
+const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
+
+
 return res.status(200).json({
     success : true ,
     message :"course details fetched succesfully" ,
-    course : courseDetails ,
+    data : {courseDetails ,totalDuration, 
+    }
 })
 
 
