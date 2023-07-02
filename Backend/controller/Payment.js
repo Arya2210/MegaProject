@@ -3,6 +3,7 @@ const User = require("../models/User")
 const Course = require("../models/Course") 
 const mailSender = require("../utils/mailSender")
 const {courseEnrollmentEmail} = require("../mail/templates/courseEnrollmentEmail");
+const {paymentSuccessEmail} = require("../mail/templates/paymentSuccessEmail");
 const { default: mongoose } = require("mongoose");
 
 
@@ -55,7 +56,7 @@ exports.capturePayment = async(req ,res)=>{
         const options = {
             amount : totalAmount*100 ,
             currency : "INR" ,
-            receipt : MATH.random(Date.now().toString()) ,
+            receipt : Math.random(Date.now().toString()) ,
         }
 
         try{
@@ -162,6 +163,38 @@ const enrollStudent = async(courses ,userId ,res)=>{
        }
     }
  
+}
+
+exports.sendPaymentSuccessEmail =async(req , res)=>{
+    const {orderId ,paymentId , amount} = req.body ;
+
+    const userId = req.user.id ;
+
+    if(!orderId || !paymentId || !amount || !userId){
+        return res.status(400).json({
+            success : false ,
+            messsage : "provide all the field"
+        })
+    }
+
+    try{
+
+        const enrolledStudent = await User.findById(userId) ;
+        await mailSender(
+              enrolledStudent.email ,
+              "PAYMENT RECEIVED" ,
+              paymentSuccessEmail(`${enrolledStudent.firstName}`) ,
+              amount/100 , orderId ,paymentId
+        )
+
+    }catch(err){
+
+        return res.status(400).json({
+            success : false ,
+            message : err.message ,
+        })
+
+    }
 }
 
 

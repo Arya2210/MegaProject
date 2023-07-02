@@ -125,6 +125,14 @@ const CourseDetails = () => {
   
 
     </div>
+
+       <div className=' flex items-center'>
+           <button className='bg-yellow-50 p-6 mt-10 h-fit rounded-md' 
+                   onClick={handleBuyCourse}          
+            >
+               Buy Now
+           </button>
+       </div>
         
 
 
