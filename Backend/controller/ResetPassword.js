@@ -30,7 +30,7 @@ exports.resetPasswordToken = async(req , res)=>{
                                                     },
                                                     {new : true}) ;
     // create Url :- Url se update krne ka path khulega
-    const url = `http://localhost:3000/update-password/${token}`
+    const url = `https://studynotion-six.vercel.app/update-password/${token}`
     // send mail containing the Url
 
     await mailSender(email , "Password reset link" ,`Password reset link : ${url}`)
